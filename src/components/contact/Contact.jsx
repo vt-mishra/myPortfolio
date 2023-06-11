@@ -2,46 +2,55 @@ import { useRef, useState } from "react";
 import { GitHub, LinkedIn, Mail } from '@material-ui/icons'
 import "./contact.scss";
 import { CircularProgress } from "@material-ui/core";
-
+import emailjs from 'emailjs-com';
 
 export default function Contact() {
-    const [message, setMessage] = useState(false);
+    const [msg, setMsg] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
     const name = useRef();
     const email = useRef();
-    const msg = useRef();
-    console.log(process.env.REACT_APP_MAIL_URL);
+    const message = useRef();
+    // console.log(process.env.REACT_APP_MAIL_URL);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(name && email) {
-            setIsFetching(true);
-            try {
-                await fetch(`https://${process.env.REACT_APP_MAIL_URL}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        name: name.current.value,
-                        email: email.current.value,
-                        msg: msg.current.value
-                    })
-                })
-                .then((res) => res.json())
-                .then((jason) => {
-                    console.log(jason)
-                    setIsFetching(false);
-                    setMessage(true);
-                    setTimeout(() => {
-                        setMessage(false);
-                    }, 3000);
-                })
-            } catch (err) {
-                setIsFetching(false);
-                alert("Some error occurred..!")
-            }
-        }
+        // if(name && email) {
+        //     setIsFetching(true);
+        //     try {
+        //         await fetch(`https://${process.env.REACT_APP_MAIL_URL}`, {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-type": "application/json"
+        //             },
+        //             body: JSON.stringify({
+        //                 name: name.current.value,
+        //                 email: email.current.value,
+        //                 msg: msg.current.value
+        //             })
+        //         })
+        //         .then((res) => res.json())
+        //         .then((jason) => {
+        //             console.log(jason)
+        //             setIsFetching(false);
+        //             setMessage(true);
+        //             setTimeout(() => {
+        //                 setMessage(false);
+        //             }, 3000);
+        //         })
+        //     } catch (err) {
+        //         setIsFetching(false);
+        //         alert("Some error occurred..!")
+        //     }
+        // }
+         
+        emailjs.sendForm('service_bcvaagr','template_bakz1jh', e.target,'nZUMSTioZyQawy-_O')
+        .then(res =>{
+            console.log(res);
+            setTimeout(setIsFetching(true), 3000)
+          setIsFetching(false);
+            setTimeout(setMsg(true), 3000);
+            // window.location.reload(false);
+        }).catch(err =>{console.log(err)});
     }
     return (
         <div className="contact" id="contact">
@@ -91,7 +100,7 @@ export default function Contact() {
                             <textarea 
                                 name="message" 
                                 placeholder="Write your message here.."
-                                ref={msg}
+                                ref={message}
                             />
                             <button type="submit">
                                 {isFetching 
@@ -99,7 +108,9 @@ export default function Contact() {
                                     : "Send"
                                 }
                             </button>
-                            {message && <span>Thanks for your lovely message ❤</span>}
+                            
+                            {msg && <span>Thanks for your lovely message ❤</span>}
+                            <button onClick={()=> window.location.reload(false)}>Page Refresh</button>
                         </form>
                     </div>
                 </div>

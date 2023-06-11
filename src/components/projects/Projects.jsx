@@ -64,7 +64,7 @@ export default function Projects() {
             title: "Personal Portfolio",
             desc: [
                 ":- My first personal portfolio",
-                ":- Used <b>HTML, CSS, JS</b> and <b>ExpressJs</b>",
+                ":- Used <b>HTML, CSS, JS</b> and <b>EmailJs-Com</b>",
                 ":- Fully responsive"
             ],
             img: "assets/portfolio2.png",
